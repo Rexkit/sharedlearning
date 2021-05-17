@@ -1,74 +1,116 @@
-import { ApolloServer, gql } from 'apollo-server-micro'
+import { ApolloServer, gql, UserInputError } from 'apollo-server-micro'
 import knex from "knex";
+import jwt from "jsonwebtoken";
+import Cookies from "cookies";
+import bcrypt from "bcrypt";
+
+require('dotenv').config()
 
 const db = knex({
-  client: "pg",
-  connection: process.env.PG_CONNECTION_STRING
+    client: "pg",
+    connection: process.env.PG_CONNECTION_STRING
 });
 
-const typeDefs = gql`
+const verifyToken = (token) => {
+    if (!token) return null;
+    try {
+        return jwt.verify(token, process.env.SECRET);
+    } catch {
+        return null;
+    }
+};
+
+const typeDefs = gql `
   type Query {
-    albums(first: Int = 25, skip: Int = 0): [Album!]!
+    me: User
   }
 
-  type Artist {
-    id: ID!
-    name: String!
-    url: String!
-    albums(first: Int = 25, skip: Int = 0): [Album!]!
+  type Mutation {
+    signup(username: String!, email: String!, password: String!): User,
+    signin(email: String!): User
   }
 
-  type Album {
-    id: ID!
-    name: String!
-    year: String!
-    artist: Artist!
+  type User {
+    id: ID!,
+    username: String!,
+    email: String!
   }
 `;
 
 const resolvers = {
-  Query: {
-    albums: (_parent, args, _context) => {
-      return db
-        .select("*")
-        .from("albums")
-        .orderBy("year", "asc")
-        .limit(Math.min(args.first, 50))
-        .offset(args.skip);
-    }
-  },
+    Query: {
+        async me(_parent, _args, context) {
+            console.log("me", context.user);
+            if (context.user?.id) {
+                let [user] = await db('users').where('id', context.user.id);
+                return user;
+            } else {
+                return null;
+            }
+        },
+    },
 
-  Album: {
-    id: (album, _args, _context) => album.id,
-    artist: (album, _args, _context) => {
-      return db
-        .select("*")
-        .from("artists")
-        .where({ id: album.artist_id })
-        .first();
-    }
-  },
+    Mutation: {
+        async signup(_parent, { username, email, password }, context) {
+            let hash = await bcrypt.hash(password, 10);
 
-  Artist: {
-    id: (artist, _args, _context) => artist.id,
-    albums: (artist, args, _context) => {
-      return db
-        .select("*")
-        .from("albums")
-        .where({ artist_id: artist.id })
-        .orderBy("year", "asc")
-        .limit(Math.min(args.first, 50))
-        .offset(args.skip);
+            try {
+                await db('users').insert({ username, email, password: hash });
+                let [user] = await db('users').where('email', email);
+
+                let token = jwt.sign({ id: user.id }, process.env.SECRET!);
+                context.cookies.set("auth-token", token, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    maxAge: 5 * 60 * 60,
+                    secure: process.env.NODE_ENV === "production",
+                });
+                return user;
+            } catch (err) {
+                if (err.code === '23505') {
+                    throw new UserInputError(err.detail);
+                }
+            }
+        },
+
+        async signin(_parent, { email }, context) {
+            try {
+                let [user] = await db('users').where('email', email);
+
+                let token = jwt.sign({ id: user.id }, process.env.SECRET!);
+                context.cookies.set("auth-token", token, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                    maxAge: 5 * 60 * 60,
+                    secure: process.env.NODE_ENV === "production",
+                });
+                
+                return user;
+            } catch (error) {
+                
+            }
+        }
     }
-  }
 };
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
+const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({ req, res }) => {
+        const cookies = new Cookies(req, res);
+        const token = cookies.get("auth-token");
+        const user = verifyToken(token);
+        return {
+            cookies,
+            user,
+        };
+    },
+})
 
 export const config = {
     api: {
-      bodyParser: false,
+        bodyParser: false,
     },
-  }
+}
 
 export default apolloServer.createHandler({ path: '/api/graphql' })
