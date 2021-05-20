@@ -1,34 +1,38 @@
 {
-  "name": "sharedlearning",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@headlessui/react": "^1.2.0",
-    "@heroicons/react": "^1.0.1",
-    "@tailwindcss/forms": "^0.3.2",
-    "apollo-server-micro": "^2.24.0",
-    "bcrypt": "^5.0.1",
-    "cookies": "^0.8.0",
-    "dotenv": "^9.0.2",
-    "graphql": "^15.5.0",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^0.95.5",
-    "next": "10.2.0",
-    "next-themes": "^0.0.14",
-    "pg": "^8.6.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
-  },
-  "devDependencies": {
-    "@types/react": "^17.0.5",
-    "autoprefixer": "^10.2.5",
-    "postcss": "^8.2.15",
-    "tailwindcss": "^2.1.2",
-    "typescript": "^4.2.4"
-  }
+    "name": "sharedlearning",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "apollo:codegen": "apollo client:codegen --tagName=gql --target=typescript types"
+    },
+    "dependencies": {
+        "@apollo/client": "^3.3.19",
+        "@apollo/react-hooks": "^4.0.0",
+        "@headlessui/react": "^1.2.0",
+        "@heroicons/react": "^1.0.1",
+        "@tailwindcss/forms": "^0.3.2",
+        "apollo-boost": "^0.4.9",
+        "apollo-server-micro": "^2.24.0",
+        "bcrypt": "^5.0.1",
+        "cookies": "^0.8.0",
+        "dotenv": "^9.0.2",
+        "graphql": "^15.5.0",
+        "jsonwebtoken": "^8.5.1",
+        "knex": "^0.95.5",
+        "next": "10.2.0",
+        "next-themes": "^0.0.14",
+        "pg": "^8.6.0",
+        "react": "17.0.2",
+        "react-dom": "17.0.2"
+    },
+    "devDependencies": {
+        "@types/react": "^17.0.5",
+        "autoprefixer": "^10.2.5",
+        "postcss": "^8.2.15",
+        "tailwindcss": "^2.1.2",
+        "typescript": "^4.2.4"
+    }
 }
