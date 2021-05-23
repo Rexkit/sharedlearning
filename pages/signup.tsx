@@ -4,14 +4,14 @@ import DefaultHeader from  "../features/DefaultHeader";
 import DefaultFooter from "../features/DefaultFooter";
 import AuthForm from "../features/auth/AuthForm";
 
-const login = () => {
+const signup = () => {
     return (
         <DefaultLayout
             header={<DefaultHeader />}
-            content={<AuthForm type="login" />}
+            content={<AuthForm type="signup" />}
             footer={<DefaultFooter />}
         />
     )
 }
 
-export default login;
+export default signup;
