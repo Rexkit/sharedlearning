@@ -5,10 +5,10 @@ import { ThemeChanger } from "../components/ThemeChanger";
 
 export default function DefaultHeader() {
     return (
-        <Popover className="relative bg-white dark:bg-gray-900">
+        <Popover className="relative dark:bg-gray-900">
             {({ open }) => (
                 <>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6">
+                <div className="container px-5 mx-auto">
                     <div className="flex justify-between items-center border-b-2 border-gray-200 dark:border-gray-800 py-6 md:justify-start md:space-x-10">
                         <div className="flex justify-start">
                             <a href="/">

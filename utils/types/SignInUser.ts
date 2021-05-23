@@ -18,4 +18,5 @@ export interface SignInUser {
 
 export interface SignInUserVariables {
   email: string;
+  password: string;
 }

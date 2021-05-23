@@ -1,8 +1,36 @@
 import * as React from "react";
 import { LockClosedIcon } from '@heroicons/react/solid';
+import { useMutation } from '@apollo/client';
+import { SIGNIN_QUERY } from "../../utils/queries";
+import { SignInUser, SignInUserVariables } from "../../utils/types/SignInUser";
+import { Notification } from "../../components/Notification";
 
 const SignInForm = () => {
+    const [email, setEmail] = React.useState<string>('');
+    const [password, setPassword] = React.useState<string>('');
+    const [error, setError] = React.useState<{message:string}|null>(null);
+
+    const [login, result] = useMutation<SignInUser, SignInUserVariables>(SIGNIN_QUERY, {
+        onError: (error) => {
+            setError(error);
+        }
+    });
+
+    React.useEffect(() => {
+        if ( result.data ) {
+            console.log(result.data);
+        }
+    }, [result.data])
+
+    const submit = async (event: React.FormEvent) => {
+        event.preventDefault();
+
+        login({variables: { email, password }})
+    }
+
     return (
+        <>
+        {error ? <Notification heading={error.message} text="Please enter valid credentials" state={false} callback={() => setError(null)} /> : null}
         <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8">
                 <div>
@@ -14,21 +42,23 @@ const SignInForm = () => {
                         </a>
                     </p>
                 </div>
-                <form className="mt-8 space-y-6" action="#" method="POST">
+                <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={submit}>
                     <input type="hidden" name="remember" defaultValue="true" />
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
-                            <label htmlFor="email-address" className="sr-only">
+                            <label htmlFor="email" className="sr-only">
                                 Email address
                             </label>
                             <input
-                                id="email-address"
+                                id="email"
                                 name="email"
                                 type="email"
                                 autoComplete="email"
                                 required
                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-200 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Email address"
+                                value={email}
+                                onChange={({ target }) => setEmail(target.value)}
                             />
                         </div>
                         <div>
@@ -43,6 +73,8 @@ const SignInForm = () => {
                                 required
                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-200 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Password"
+                                value={password}
+                                onChange={({ target }) => setPassword(target.value)}
                             />
                         </div>
                     </div>
@@ -61,6 +93,7 @@ const SignInForm = () => {
                 </form>
             </div>
         </div>
+        </>
     )
 }
 

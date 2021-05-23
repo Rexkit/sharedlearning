@@ -1,4 +1,4 @@
-import { ApolloServer, gql, UserInputError } from 'apollo-server-micro'
+import { ApolloServer, gql, UserInputError, AuthenticationError } from 'apollo-server-micro'
 import knex from "knex";
 import jwt from "jsonwebtoken";
 import Cookies from "cookies";
@@ -27,7 +27,7 @@ const typeDefs = gql `
 
   type Mutation {
     signup(username: String!, email: String!, password: String!): User,
-    signin(email: String!): User
+    signin(email: String!, password: String!): User
   }
 
   type User {
@@ -62,7 +62,7 @@ const resolvers = {
                 context.cookies.set("auth-token", token, {
                     httpOnly: true,
                     sameSite: "lax",
-                    maxAge: 5 * 60 * 60,
+                    maxAge: 7200000,
                     secure: process.env.NODE_ENV === "production",
                 });
                 return user;
@@ -73,22 +73,29 @@ const resolvers = {
             }
         },
 
-        async signin(_parent, { email }, context) {
-            try {
-                let [user] = await db('users').where('email', email);
+        async signin(_parent, { email, password }, context) {
+            let [user] = await db('users').where('email', email);
 
-                let token = jwt.sign({ id: user.id }, process.env.SECRET!);
-                context.cookies.set("auth-token", token, {
-                    httpOnly: true,
-                    sameSite: "lax",
-                    maxAge: 5 * 60 * 60,
-                    secure: process.env.NODE_ENV === "production",
-                });
-                
-                return user;
-            } catch (error) {
-                
+            if (user) {
+                const validPassword = await bcrypt.compare(password, user.password);
+
+                if (validPassword) {
+                    let token = jwt.sign({ id: user.id }, process.env.SECRET!);
+
+                    context.cookies.set("auth-token", token, {
+                        httpOnly: true,
+                        sameSite: "lax",
+                        maxAge: 7200000,
+                        secure: process.env.NODE_ENV === "production",
+                    });
+                } else {
+                    throw new AuthenticationError("Invalid password");
+                }
+            } else {
+                throw new AuthenticationError("Invalid email");
             }
+
+            return user;
         }
     }
 };

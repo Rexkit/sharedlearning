@@ -11,8 +11,8 @@ export const CURRENT_USER_QUERY: DocumentNode = gql`
 `;
 
 export const SIGNIN_QUERY: DocumentNode = gql`
-    mutation SignInUser($email: String!) {
-        signin(email: $email) {
+    mutation SignInUser($email: String!, $password: String!) {
+        signin(email: $email, password: $password) {
             id
         }
     }
