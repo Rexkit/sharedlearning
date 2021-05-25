@@ -40,7 +40,6 @@ const typeDefs = gql `
 const resolvers = {
     Query: {
         async me(_parent, _args, context) {
-            console.log("me", context.user);
             if (context.user?.id) {
                 let [user] = await db('users').where('id', context.user.id);
                 return user;

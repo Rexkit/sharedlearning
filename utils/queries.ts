@@ -1,7 +1,7 @@
 import { gql, DocumentNode } from "@apollo/client";
 
 export const CURRENT_USER_QUERY: DocumentNode = gql`
-    query CURRENT_USER_QUERY {
+    query currentUserQuery {
         me {
             id,
             username,

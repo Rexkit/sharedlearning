@@ -5,6 +5,7 @@ import { useMutation } from '@apollo/client';
 import { SIGNIN_QUERY, SIGNUP_QUERY } from "../../utils/queries";
 import { SignInUser, SignInUserVariables } from "../../utils/types/SignInUser";
 import { SignUpUser, SignUpUserVariables } from "../../utils/types/SignUpUser";
+import { useAuth } from "../../utils/hooks/useAuth";
 import { Notification } from "../../components/Notification";
 
 type AuthProps = {
@@ -16,6 +17,8 @@ const AuthForm = ({ type }: AuthProps) => {
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
     const [error, setError] = React.useState<{message:string}|null>(null);
+
+    const { setUser } = useAuth();
 
     const [auth, result] = useMutation<SignInUser|SignUpUser, SignInUserVariables|SignUpUserVariables>(type === "signup" ? SIGNUP_QUERY : SIGNIN_QUERY, {
         onError: (error) => {
@@ -33,10 +36,12 @@ const AuthForm = ({ type }: AuthProps) => {
         event.preventDefault();
 
         if (type === "signup") {
-            auth({variables: { username, email, password }})
+            await auth({variables: { username, email, password }});
         } else {
-            auth({variables: { email, password }})
+            await auth({variables: { email, password }});
         }
+
+        setUser();
     }
 
     return (
