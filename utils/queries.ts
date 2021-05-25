@@ -25,3 +25,9 @@ export const SIGNUP_QUERY: DocumentNode = gql`
         }
     }
 `;
+
+export const LOGOUT_QUERY: DocumentNode = gql`
+    mutation Logout {
+        logout
+    }
+`;

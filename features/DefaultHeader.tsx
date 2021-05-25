@@ -3,8 +3,11 @@ import Link from 'next/link';
 import { Popover, Transition } from "@headlessui/react";
 import { AcademicCapIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
 import { ThemeChanger } from "../components/ThemeChanger";
+import { useAuth } from "../utils/hooks/useAuth";
 
 export default function DefaultHeader() {
+    const { user, logout } = useAuth();
+
     return (
         <Popover className="relative dark:bg-gray-900">
             {({ open }) => (
@@ -39,19 +42,28 @@ export default function DefaultHeader() {
                             <div className="md:mr-8">
                                 <ThemeChanger />
                             </div>
-                            <div className="hidden md:flex items-center">
-                                <Link href="/login">
-                                    <a className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
-                                        Sign in
-                                    </a>
-                                </Link>
-                                
-                                <Link href="/signup">
-                                    <a href="#" className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                                        Sign up
-                                    </a>
-                                </Link>
-                            </div>
+                            {user.me ? 
+                                <div className="hidden md:flex items-center">
+                                    <Link href="/login">
+                                        <a onClick={() => logout()} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
+                                            Logout
+                                        </a>
+                                    </Link>
+                                </div>:
+                                <div className="hidden md:flex items-center">
+                                    <Link href="/login">
+                                        <a className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
+                                            Sign in
+                                        </a>
+                                    </Link>
+                                    
+                                    <Link href="/signup">
+                                        <a href="#" className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                                            Sign up
+                                        </a>
+                                    </Link>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

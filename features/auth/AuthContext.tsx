@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const AuthContext = React.createContext<{
-    user: {} | null,
+    user: { me: {}| null } | null,
     setUser: () => void,
     logout: () => void
 }>({

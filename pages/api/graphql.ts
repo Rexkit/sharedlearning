@@ -27,7 +27,8 @@ const typeDefs = gql `
 
   type Mutation {
     signup(username: String!, email: String!, password: String!): User,
-    signin(email: String!, password: String!): User
+    signin(email: String!, password: String!): User,
+    logout: Boolean
   }
 
   type User {
@@ -95,6 +96,10 @@ const resolvers = {
             }
 
             return user;
+        },
+
+        async logout(_parent, _args, context) {
+            context.cookies.set("auth-token", "", { maxAge: -1 });
         }
     }
 };
