@@ -10,6 +10,17 @@ export const CURRENT_USER_QUERY: DocumentNode = gql`
     }
 `;
 
+export const USER_PAGES_QUERY: DocumentNode = gql`
+    query userPagesQuery {
+        pages {
+            id,
+            name,
+            description,
+            user_id
+        }
+    }
+`;
+
 export const SIGNIN_QUERY: DocumentNode = gql`
     mutation SignInUser($email: String!, $password: String!) {
         signin(email: $email, password: $password) {

@@ -30,9 +30,11 @@ export default function DefaultHeader() {
                             </Popover.Button>
                         </div>
                         <nav className="hidden md:flex space-x-10">
-                            <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
-                                Pages
-                            </a>
+                            <Link href="/pages">
+                                <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
+                                    Pages
+                                </a>
+                            </Link>
                             <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
                                 About
                             </a>

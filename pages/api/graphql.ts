@@ -22,7 +22,8 @@ const verifyToken = (token) => {
 
 const typeDefs = gql `
   type Query {
-    me: User
+    me: User,
+    pages: [Page]
   }
 
   type Mutation {
@@ -36,6 +37,13 @@ const typeDefs = gql `
     username: String!,
     email: String!
   }
+
+  type Page {
+      id: ID!,
+      name: String!,
+      description: String!,
+      user_id: ID!
+  }
 `;
 
 const resolvers = {
@@ -48,6 +56,14 @@ const resolvers = {
                 return null;
             }
         },
+        async pages(_parent, _args, context) {
+            if (context.user?.id) {
+                const pages = await db('pages').where('user_id', context.user.id);
+                return pages;
+            } else {
+                return null;
+            }
+        }
     },
 
     Mutation: {

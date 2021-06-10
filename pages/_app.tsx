@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, NormalizedCacheObject } from "@apollo/clie
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '../features/auth/AuthProvider';
 import { AppProps } from 'next/app';
+import { ProtectRoute } from '../features/auth/protectRoute';
 
 const client = new ApolloClient<NormalizedCacheObject>({
     cache: new InMemoryCache(),
@@ -15,7 +16,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ApolloProvider client={client}>
             <ThemeProvider attribute="class" enableSystem={false}>
                 <AuthProvider>
-                    <Component {...pageProps} />
+                    <ProtectRoute>
+                        <Component {...pageProps} />
+                    </ProtectRoute>
                 </AuthProvider>
             </ThemeProvider>
         </ApolloProvider>
