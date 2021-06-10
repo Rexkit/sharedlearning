@@ -42,3 +42,9 @@ export const LOGOUT_QUERY: DocumentNode = gql`
         logout
     }
 `;
+
+export const CREATE_PAGE_QUERY: DocumentNode = gql`
+    mutation createPage($name: String!, $description: String!) {
+        createPage(name: $name, description: $description)
+    }
+`;

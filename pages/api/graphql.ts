@@ -29,7 +29,8 @@ const typeDefs = gql `
   type Mutation {
     signup(username: String!, email: String!, password: String!): User,
     signin(email: String!, password: String!): User,
-    logout: Boolean
+    logout: Boolean,
+    createPage(name: String!, description: String!): Boolean
   }
 
   type User {
@@ -116,6 +117,16 @@ const resolvers = {
 
         async logout(_parent, _args, context) {
             context.cookies.set("auth-token", "", { maxAge: -1 });
+        },
+
+        async createPage(_parent, { name, description }, context) {
+            if (context.user?.id) {
+                const user_id = context.user.id;
+                await db('pages').insert({ name, description, user_id})
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 };
