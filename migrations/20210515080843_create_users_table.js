@@ -1,6 +1,8 @@
-exports.up = function(knex) {
+exports.up = async (knex) => {
+    await knex.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
+
     return knex.schema.createTable("users", function(table) {
-        table.increments("id").unique();
+        table.uuid("id").unique().notNullable().primary().defaultTo(knex.raw('uuid_generate_v4()'));
         table.string("username").notNullable();
         table.string("email").notNullable().unique();
         table.string("password").notNullable();

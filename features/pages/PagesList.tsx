@@ -2,20 +2,31 @@ import * as React from "react";
 import { useQuery } from '@apollo/client';
 import { USER_PAGES_QUERY } from "../../utils/queries";
 import { userPagesQuery } from "../../utils/types/userPagesQuery";
-import PageItem from "./PageItem";
+import PageItem from "./PageItem"
+import CreatePageWindow from "./CreatePageWindow";
 
 const PagesList = () => {
     const { loading, data, refetch } = useQuery<userPagesQuery>(USER_PAGES_QUERY);
+    const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
 
     if (loading) {
         return <p>Loading</p>
+    }
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        refetch();
     }
 
     return (
         <section className="container px-5 py-6 mx-auto space-y-4">
             <header className="flex items-center justify-between">
                 <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Pages</h2>
-                <button className="hover:bg-indigo-200 hover:text-indigo-800 group flex items-center rounded-md bg-indigo-100 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-indigo-600 dark:text-white text-sm font-medium px-4 py-2">
+                <button onClick={openModal} className="hover:bg-indigo-200 hover:text-indigo-800 group flex items-center rounded-md bg-indigo-100 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-indigo-600 dark:text-white text-sm font-medium px-4 py-2">
                     <svg className="text-indigo-500 dark:text-white mr-2" width="12" height="20" fill="currentColor">
                         <path fillRule="evenodd" clipRule="evenodd" d="M6 5a1 1 0 011 1v3h3a1 1 0 110 2H7v3a1 1 0 11-2 0v-3H2a1 1 0 110-2h3V6a1 1 0 011-1z"/>
                     </svg>
@@ -32,12 +43,13 @@ const PagesList = () => {
                 {data.pages.map(item => (
                     <PageItem name={item.name} description={item.description} id={item.id} />
                 ))}
-                <li className="hover:shadow-lg flex rounded-lg">
-                    <a href="/new" className="hover:border-transparent dark:hover:border-indigo-500 hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">
+                <li className="hover:shadow-lg flex rounded-lg cursor-pointer" key={-1}>
+                    <a onClick={openModal} className="hover:border-transparent dark:hover:border-indigo-500 hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">
                         New Project
                     </a>
                 </li>
             </ul>
+            <CreatePageWindow isOpenProp={isModalOpen} closeModalProp={closeModal} />
         </section>
     );
 }

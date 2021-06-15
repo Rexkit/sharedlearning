@@ -1,14 +1,16 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import { DefaultLayout } from "../../layouts/Default";
+import DefaultHeader from  "../../features/DefaultHeader";
+import DefaultFooter from "../../features/DefaultFooter";
+import SinglePageContent from '../../features/singlePage/SinglePageContent';
 
 const singlePage = () => {
-    const router = useRouter();
-    const { id } = router.query;
-
     return (
-        <div>
-            <p>Page id: {id}</p>
-        </div>
+        <DefaultLayout
+            header={<DefaultHeader />}
+            content={<SinglePageContent />}
+            footer={<DefaultFooter />}
+        />
     )
 }
 

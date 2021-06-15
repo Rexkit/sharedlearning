@@ -16,13 +16,13 @@ const PageItem = ({ name, description, id}) => {
                         <div>
                             <dt className="sr-only">Title</dt>
                             <dd className="group-hover:text-white leading-6 font-medium text-gray-900 dark:text-gray-200">
-                            {name} Title
+                            {name}
                             </dd>
                         </div>
                         <div>
                             <dt className="sr-only">Description</dt>
                             <dd className="group-hover:text-indigo-200 text-sm font-medium sm:mb-4 lg:mb-0 xl:mb-4">
-                            {description} Description
+                            {description}
                             </dd>
                         </div>
                     </dl>
