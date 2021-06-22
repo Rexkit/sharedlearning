@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from 'next/link';
+import { useRouter } from "next/router";
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useMutation } from '@apollo/client';
 import { SIGNIN_QUERY, SIGNUP_QUERY } from "../../utils/queries";
@@ -13,6 +14,7 @@ type AuthProps = {
 }
 
 const AuthForm = ({ type }: AuthProps) => {
+    const Router = useRouter();
     const [username, setUsername] = React.useState<string>('');
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
@@ -28,6 +30,7 @@ const AuthForm = ({ type }: AuthProps) => {
 
     React.useEffect(() => {
         if ( result.data ) {
+            Router.replace("/pages");
             console.log(result.data);
         }
     }, [result.data])

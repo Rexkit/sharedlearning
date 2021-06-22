@@ -7,6 +7,10 @@ export const ProtectRoute = ({ children }) => {
     if (typeof window !== "undefined") {
         const Router = useRouter();
 
+        if (window.location.pathname.includes('/pages/')) {
+            return children;
+        }
+
         if (!user.me && window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
             Router.replace("/login");
             return null;

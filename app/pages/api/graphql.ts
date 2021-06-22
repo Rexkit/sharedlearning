@@ -1,4 +1,4 @@
-import { ApolloServer, gql, UserInputError, AuthenticationError } from 'apollo-server-micro'
+import { ApolloServer, gql, UserInputError, AuthenticationError } from 'apollo-server-micro';
 import knex from "knex";
 import jwt from "jsonwebtoken";
 import Cookies from "cookies";
@@ -21,30 +21,30 @@ const verifyToken = (token) => {
 };
 
 const typeDefs = gql `
-  type Query {
-    me: User,
-    pages: [Page]
-  }
+    type Query {
+        me: User,
+        pages: [Page]
+    }
 
-  type Mutation {
-    signup(username: String!, email: String!, password: String!): User,
-    signin(email: String!, password: String!): User,
-    logout: Boolean,
-    createPage(name: String!, description: String!): Boolean
-  }
+    type Mutation {
+        signup(username: String!, email: String!, password: String!): User,
+        signin(email: String!, password: String!): User,
+        logout: Boolean,
+        createPage(name: String!, description: String!): Boolean,
+    }
 
-  type User {
-    id: ID!,
-    username: String!,
-    email: String!
-  }
+    type User {
+        id: ID!,
+        username: String!,
+        email: String!
+    }
 
-  type Page {
-      id: ID!,
-      name: String!,
-      description: String!,
-      user_id: ID!
-  }
+    type Page {
+        id: ID!,
+        name: String!,
+        description: String!,
+        user_id: ID!
+    }
 `;
 
 const resolvers = {
@@ -151,4 +151,4 @@ export const config = {
     },
 }
 
-export default apolloServer.createHandler({ path: '/api/graphql' })
+export default apolloServer.createHandler({ path: '/api/graphql' });
