@@ -21,6 +21,18 @@ export const USER_PAGES_QUERY: DocumentNode = gql`
     }
 `;
 
+export const USER_FILES_QUERY: DocumentNode = gql`
+    query userFilesQuery($pageid: String!) {
+        files(page_id: $pageid) {
+            id,
+            filename,
+            type,
+            user_id,
+            page_id
+        }
+    }
+`;
+
 export const SIGNIN_QUERY: DocumentNode = gql`
     mutation SignInUser($email: String!, $password: String!) {
         signin(email: $email, password: $password) {

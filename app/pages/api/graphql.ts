@@ -23,7 +23,8 @@ const verifyToken = (token) => {
 const typeDefs = gql `
     type Query {
         me: User,
-        pages: [Page]
+        pages: [Page],
+        files(page_id: String!): [File]
     }
 
     type Mutation {
@@ -45,6 +46,14 @@ const typeDefs = gql `
         description: String!,
         user_id: ID!
     }
+
+    type File {
+        id: ID!,
+        filename: String!,
+        type: String!,
+        user_id: ID!,
+        page_id: ID!
+    }
 `;
 
 const resolvers = {
@@ -61,6 +70,17 @@ const resolvers = {
             if (context.user?.id) {
                 const pages = await db('pages').where('user_id', context.user.id);
                 return pages;
+            } else {
+                return null;
+            }
+        },
+        async files(_parent, { page_id }, context) {
+            if (context.user?.id) {
+                const files = await db('media').where({
+                    'user_id': context.user.id,
+                    'page_id': page_id
+                });
+                return files;
             } else {
                 return null;
             }

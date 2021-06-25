@@ -1,0 +1,43 @@
+import * as React from "react";
+import FileItem from './FileItem';
+import axios from 'axios';
+
+type listProps = {
+    files: Array<{
+        id: string,
+        filename: string,
+        type: string,
+        user_id: string,
+        page_id: string
+    }>,
+    type: string,
+    refetch: () => void
+}
+
+const FileList = ({ files, type, refetch }: listProps) => {
+
+    const deleteItem = async (id: string) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/${id}`, {withCredentials: true});
+            refetch();
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    return (
+        <>
+            <header className="flex items-center justify-between">
+                <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">{type} Files</h2>
+            </header>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {files.map(file => (
+                    <FileItem file={file} key={file.filename} fdel={(id: string) => deleteItem(id)} />
+                ))}
+            </ul>
+        </>
+    );
+}
+
+export default FileList;
