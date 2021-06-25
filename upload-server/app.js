@@ -57,9 +57,18 @@ const verifyUser = (req, res, next) => {
 
 app.use(verifyUser);
 
-app.post('/', upload.single('file'), (req, res) => {
+app.post('/:user_id/:page_id', upload.single('file'), async (req, res) => {
+    console.log(req.file);
+    const file = req.file;
+    let filesToInsert = {
+        filename: file.filename,
+        type: file.mimetype.substring(0, file.mimetype.indexOf('/')),
+        user_id: req.params.user_id,
+        page_id: req.params.page_id
+    }
     try {
-        res.send(req.file);
+        await database('media').insert(filesToInsert);
+        res.send(filesToInsert);
     }catch(err) {
         res.send(400);
     }

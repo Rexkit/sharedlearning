@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
-import Dropzone from 'react-dropzone';
 import FileList from './FileList';
+import Uploader from '../../components/Uploader';
+import { useAuth } from "../../utils/hooks/useAuth";
 
 import { USER_FILES_QUERY } from "../../utils/queries";
 import { userFilesQuery } from "../../utils/types/userFilesQuery";
@@ -12,6 +13,7 @@ const SinglePageEditor = () => {
     const { id: page_id } = router.query;
 
     const [shouldSkip, setShouldSkip] = React.useState(true)
+    const { user } = useAuth();
 
     const { loading, data, refetch } = useQuery<userFilesQuery>(USER_FILES_QUERY, {
         variables: { pageid: page_id },
@@ -25,14 +27,6 @@ const SinglePageEditor = () => {
     }, [page_id]);
 
     let videoList = [], audioList = [];
-
-    const onDrop = React.useCallback(acceptedFiles => {
-        console.log(acceptedFiles);
-    }, []);
-
-    if (loading) {
-        return <p>Loading</p>
-    }
 
     if (data) {
         data.files.forEach(file => {
@@ -51,17 +45,8 @@ const SinglePageEditor = () => {
                     <FileList files={videoList} type='Video' refetch={() => refetch()} />
                 </>
             :null}
-            
-            <Dropzone onDrop={onDrop}>
-                {({getRootProps, getInputProps}) => (
-                    <section>
-                        <div {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
-                        </div>
-                    </section>
-                )}
-            </Dropzone>
+
+            <Uploader user_id={user.me.id} page_id={page_id} refetch={() => refetch()} />
         </section>
     )
 }
