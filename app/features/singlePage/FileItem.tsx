@@ -15,7 +15,7 @@ type ItemProps = {
 const FileItem = ({ file, fdel }: ItemProps) => {
     return (
         <li x-for="item in items" key={file.filename}>
-            <a className="flex justify-between h-full hover:bg-indigo-500 group rounded-lg p-4 border dark:bg-gray-800 dark:hover:bg-indigo-500 border-gray-200 dark:border-gray-800  hover:border-transparent hover:shadow-lg ">
+            <a className="flex justify-between h-full group rounded-lg p-4 border dark:bg-gray-800 border-gray-200 dark:border-gray-800  hover:border-transparent hover:shadow-lg ">
                 <dl className="flex items-center">
                     <div>
                         <dt className="sr-only">Filename</dt>

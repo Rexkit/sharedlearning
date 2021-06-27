@@ -8,11 +8,18 @@ import { useAuth } from "../../utils/hooks/useAuth";
 
 const singlePage = () => {
     const { user } = useAuth();
+    const [previewMode, setPreviewMode] = React.useState(user.me? false : true);
+
+    const togglePreviewMode = () => {
+        setPreviewMode(!previewMode);
+    }
 
     return (
         <DefaultLayout
             header={<DefaultHeader />}
-            content={user.me ? <SinglePageEditor /> : <SinglePagePreview />}
+            content={previewMode ?
+                <SinglePagePreview authState={user.me? true : false} togglePreviewMode={togglePreviewMode} />:
+                <SinglePageEditor togglePreviewMode={togglePreviewMode} />}
             footer={<DefaultFooter />}
         />
     )

@@ -13,28 +13,33 @@ const Uploader = ({ user_id, page_id, refetch }: UploaderProps) => {
 
     // called every time a file's `status` changes
     const handleChangeStatus = ({ meta, file }, status) => { 
-        console.log(status, meta, file)
-        if (status === 'done') {
-            refetch();
-        }
+        console.log(status, meta, file);
     }
 
     // receives array of files that are done uploading when submit button is clicked
     const handleSubmit = (files, allFiles) => {
         console.log(files.map(f => f.meta))
         allFiles.forEach(f => f.remove())
+        refetch();
     }
 
     return (
-        <Dropzone
-            addClassNames={{
-                dropzone: "overflow-hidden"
-            }}
-            getUploadParams={getUploadParams}
-            onChangeStatus={handleChangeStatus}
-            onSubmit={handleSubmit}
-            accept="audio/*,video/*"
-        />
+        <>
+            <header className="flex items-center justify-between">
+                <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Upload your files</h2>
+            </header>
+            <Dropzone
+                addClassNames={{
+                    dropzone: "overflow-hidden",
+                    preview: "dark:text-gray-200"
+                }}
+                getUploadParams={getUploadParams}
+                onChangeStatus={handleChangeStatus}
+                onSubmit={handleSubmit}
+                accept="audio/*,video/*"
+                submitButtonContent={'Display'}
+            />
+        </>
     )
 }
 

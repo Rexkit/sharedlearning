@@ -2,3 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dzu-previewFileName {
+    color: inherit
+}
+
+.dzu-previewButton {
+    display: none;
+}
