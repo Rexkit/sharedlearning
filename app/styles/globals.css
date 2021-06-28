@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html.light .react-jinke-music-player-main .music-player-panel, html.light .audio-lists-panel {
+    --tw-bg-opacity: 1;
+    background-color: rgba(79, 70, 229, var(--tw-bg-opacity));
+}
+
+html.dark .react-jinke-music-player-main .music-player-panel, html.dark .audio-lists-panel {
+    --tw-bg-opacity: 1;
+    background-color: rgba(31, 41, 55, var(--tw-bg-opacity));
+}
+
 .dzu-previewFileName {
     color: inherit
 }

@@ -75,15 +75,10 @@ const resolvers = {
             }
         },
         async files(_parent, { page_id }, context) {
-            if (context.user?.id) {
-                const files = await db('media').where({
-                    'user_id': context.user.id,
-                    'page_id': page_id
-                });
-                return files;
-            } else {
-                return null;
-            }
+            const files = await db('media').where({
+                'page_id': page_id
+            });
+            return files;
         }
     },
 

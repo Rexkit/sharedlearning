@@ -54,11 +54,11 @@ const SinglePageEditor = ({ togglePreviewMode }: SPType) => {
             <MarkdownEditor />
 
             {audioList.length > 0 ?
-                <FileList files={audioList} type='Audio' refetch={() => refetch()} />
+                <FileList files={audioList} type='Audio' page_id={page_id} refetch={() => refetch()} />
             :null}
 
             {videoList.length > 0 ?
-                <FileList files={videoList} type='Video' refetch={() => refetch()} />
+                <FileList files={videoList} type='Video' page_id={page_id} refetch={() => refetch()} />
             :null}
 
             <Uploader user_id={user.me.id} page_id={page_id} refetch={() => refetch()} />

@@ -11,14 +11,15 @@ type listProps = {
         page_id: string
     }>,
     type: string,
-    refetch: () => void
+    refetch: () => void,
+    page_id: string
 }
 
-const FileList = ({ files, type, refetch }: listProps) => {
+const FileList = ({ files, type, refetch, page_id }: listProps) => {
 
     const deleteItem = async (id: string) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/${id}`, {withCredentials: true});
+            const response = await axios.delete(`http://localhost:3001/${page_id}/${id}`, {withCredentials: true});
             refetch();
             console.log(response);
         } catch (error) {

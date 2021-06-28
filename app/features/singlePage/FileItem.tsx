@@ -15,11 +15,11 @@ type ItemProps = {
 const FileItem = ({ file, fdel }: ItemProps) => {
     return (
         <li x-for="item in items" key={file.filename}>
-            <a className="flex justify-between h-full group rounded-lg p-4 border dark:bg-gray-800 border-gray-200 dark:border-gray-800  hover:border-transparent hover:shadow-lg ">
+            <a className="flex justify-between h-full group rounded-lg p-4 border dark:bg-gray-800 border-gray-200">
                 <dl className="flex items-center">
                     <div>
                         <dt className="sr-only">Filename</dt>
-                        <dd className="group-hover:text-white leading-6 font-medium text-gray-900 dark:text-gray-200">
+                        <dd className="leading-6 font-medium text-gray-900 dark:text-gray-200">
                             {file.filename.substring(file.filename.indexOf('-') + 1)}
                         </dd>
                     </div>

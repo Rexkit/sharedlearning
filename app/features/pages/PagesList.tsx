@@ -41,7 +41,7 @@ const PagesList = () => {
             </form>
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {data.pages.map(item => (
-                    <PageItem name={item.name} description={item.description} id={item.id} />
+                    <PageItem key={item.id} name={item.name} description={item.description} id={item.id} />
                 ))}
                 <li className="hover:shadow-lg flex rounded-lg cursor-pointer" key={-1}>
                     <a onClick={openModal} className="hover:border-transparent dark:hover:border-indigo-500 hover:shadow-xs w-full flex items-center justify-center rounded-lg border-2 border-dashed border-gray-200 text-sm font-medium py-4">

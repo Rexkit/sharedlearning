@@ -1,5 +1,13 @@
 import * as React from "react";
 import { useRouter } from 'next/router';
+import { useQuery } from '@apollo/client';
+import { USER_FILES_QUERY } from "../../utils/queries";
+import { userFilesQuery } from "../../utils/types/userFilesQuery";
+import dynamic from 'next/dynamic';
+
+const PlayerWithNoSSR = dynamic(() => import('../../components/AudioPlayer'), {
+  ssr: false,
+})
 
 type SPPType = {
     authState: boolean,
@@ -8,7 +16,36 @@ type SPPType = {
 
 const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
     const router = useRouter();
-    const { id } = router.query;
+    const { id: page_id } = router.query;
+    let videoList = [], audioList = [];
+    const baseStorageURL = 'http://localhost:3001';
+
+    const [shouldSkip, setShouldSkip] = React.useState(true)
+
+    const { loading, data, refetch } = useQuery<userFilesQuery>(USER_FILES_QUERY, {
+        variables: { pageid: page_id },
+        skip: shouldSkip
+    });
+
+    React.useEffect(() => {
+        if (page_id) {
+          setShouldSkip(false)
+        }
+    }, [page_id]);
+
+    if (data) {
+        data.files.forEach(file => {
+            if (file.type === 'video')
+                videoList.push(file);
+            else
+                audioList.push({
+                    name: file.filename.substring(file.filename.indexOf('-') + 1).split('.').slice(0, -1).join('.'),
+                    musicSrc: `${baseStorageURL}/files/${file.page_id}/${file.filename}`,
+                });
+        });
+        console.log(videoList);
+        console.log(audioList);
+    }
 
     return (
         <section className="container px-5 py-6 mx-auto space-y-4">
@@ -21,6 +58,7 @@ const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
                         </a>
                     </header>
                 </>: null}
+            <PlayerWithNoSSR audioList={audioList} />
         </section>
     )
 }
