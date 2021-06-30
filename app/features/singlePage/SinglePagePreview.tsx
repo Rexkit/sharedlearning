@@ -40,7 +40,7 @@ const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
             else
                 audioList.push({
                     name: file.filename.substring(file.filename.indexOf('-') + 1).split('.').slice(0, -1).join('.'),
-                    musicSrc: `${baseStorageURL}/files/${file.page_id}/${file.filename}`,
+                    musicSrc: `${baseStorageURL}/audio/${file.page_id}/${file.filename}`,
                 });
         });
         console.log(videoList);
