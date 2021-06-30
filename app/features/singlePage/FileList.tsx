@@ -12,7 +12,7 @@ type listProps = {
     }>,
     type: string,
     refetch: () => void,
-    page_id: string
+    page_id: string | string[]
 }
 
 const FileList = ({ files, type, refetch, page_id }: listProps) => {

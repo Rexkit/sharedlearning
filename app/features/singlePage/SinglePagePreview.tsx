@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { USER_FILES_QUERY } from "../../utils/queries";
 import { userFilesQuery } from "../../utils/types/userFilesQuery";
+import VideoPlayer from "../../components/VideoPlayer";
 import dynamic from 'next/dynamic';
 
 const PlayerWithNoSSR = dynamic(() => import('../../components/AudioPlayer'), {
@@ -36,7 +37,10 @@ const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
     if (data) {
         data.files.forEach(file => {
             if (file.type === 'video')
-                videoList.push(file);
+                videoList.push({
+                    name: file.filename.substring(file.filename.indexOf('-') + 1).split('.').slice(0, -1).join('.'),
+                    src: `${baseStorageURL}/video/${file.page_id}/${file.filename}`,
+                });
             else
                 audioList.push({
                     name: file.filename.substring(file.filename.indexOf('-') + 1).split('.').slice(0, -1).join('.'),
@@ -58,7 +62,8 @@ const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
                         </a>
                     </header>
                 </>: null}
-            <PlayerWithNoSSR audioList={audioList} />
+            <VideoPlayer videoList={videoList} />
+            {/* <PlayerWithNoSSR audioList={audioList} /> */}
         </section>
     )
 }
