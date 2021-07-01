@@ -3,6 +3,7 @@ import knex from "knex";
 import jwt from "jsonwebtoken";
 import Cookies from "cookies";
 import bcrypt from "bcrypt";
+import GraphQLJSON from 'graphql-type-json';
 
 require('dotenv').config()
 
@@ -21,10 +22,13 @@ const verifyToken = (token) => {
 };
 
 const typeDefs = gql `
+    scalar JSON
+
     type Query {
         me: User,
         pages: [Page],
-        files(page_id: String!): [File]
+        files(page_id: String!): [File],
+        pageTextContent(page_id: String!): [TextContent]
     }
 
     type Mutation {
@@ -32,6 +36,7 @@ const typeDefs = gql `
         signin(email: String!, password: String!): User,
         logout: Boolean,
         createPage(name: String!, description: String!): Boolean,
+        setPageTextContent(page_id: String!, content: JSON!): Boolean
     }
 
     type User {
@@ -54,9 +59,14 @@ const typeDefs = gql `
         user_id: ID!,
         page_id: ID!
     }
+
+    type TextContent {
+        data: JSON
+    }
 `;
 
 const resolvers = {
+    JSON: GraphQLJSON,
     Query: {
         async me(_parent, _args, context) {
             if (context.user?.id) {
@@ -79,10 +89,32 @@ const resolvers = {
                 'page_id': page_id
             });
             return files;
+        },
+        async pageTextContent(_parent, { page_id }, context) {
+            const textContent = await db('textcontent').where({
+                'page_id': page_id
+            });
+            return textContent;
         }
     },
 
     Mutation: {
+        async setPageTextContent(_parent, { page_id, content }, context) {
+            if (context.user?.id) {
+                try {
+                    await db('textcontent').insert({
+                        page_id,
+                        data: JSON.stringify(content)
+                    }).onConflict("page_id").merge();
+                } catch (error) {
+                    console.log(error.message);
+                }
+                
+                return true;
+            } else {
+                return false;
+            }
+        },
         async signup(_parent, { username, email, password }, context) {
             let hash = await bcrypt.hash(password, 10);
 

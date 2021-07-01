@@ -11,17 +11,19 @@ export const DefaultLayout = ({ header, content, footer, centerContent }: Props)
     return (
         <div className='bg-gray-50 dark:bg-gray-900'>
             <div className="flex flex-col min-h-screen justify-between">
-                {header && (
-                    <header>
-                        {header}
-                    </header>
-                )}
-                
-                {content && (
-                    <main className={centerContent ? 'h-auto' : 'h-full'}>
-                        {content}
-                    </main>
-                )}
+                <div>
+                    {header && (
+                        <header>
+                            {header}
+                        </header>
+                    )}
+                    
+                    {content && (
+                        <main className={centerContent ? 'h-auto' : 'h-full'}>
+                            {content}
+                        </main>
+                    )}
+                </div>
                 
                 {footer && (
                     <footer>

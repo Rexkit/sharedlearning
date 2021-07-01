@@ -33,6 +33,20 @@ export const USER_FILES_QUERY: DocumentNode = gql`
     }
 `;
 
+export const PAGE_TEXT_CONTENT: DocumentNode = gql`
+    query pageTextContent($pageid: String!) {
+        pageTextContent(page_id: $pageid) {
+            data
+        }
+    }
+`;
+
+export const SET_PAGE_TEXT_CONTENT: DocumentNode = gql`
+    mutation setPageTextContent($pageid: String!, $content: JSON!) {
+        setPageTextContent(page_id: $pageid, content: $content)
+    }
+`;
+
 export const SIGNIN_QUERY: DocumentNode = gql`
     mutation SignInUser($email: String!, $password: String!) {
         signin(email: $email, password: $password) {

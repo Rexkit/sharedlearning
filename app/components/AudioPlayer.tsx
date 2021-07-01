@@ -14,7 +14,7 @@ const AudioPlayer = ({ audioList }: APtype) => {
 
     React.useEffect(() => {
         setMPLists(audioList);
-    }, [ audioList ])
+    }, [ audioList ]);
 
     return (
         <div>
@@ -22,7 +22,6 @@ const AudioPlayer = ({ audioList }: APtype) => {
                 <ReactJkMusicPlayer
                     showMediaSession
                     audioLists={MPLists}
-                    quietUpdate
                     clearPriorAudioLists
                     showReload={false}
                     showDownload={false}
@@ -32,7 +31,7 @@ const AudioPlayer = ({ audioList }: APtype) => {
                     remove={false}
                     toggleMode={false}
                     autoPlay={false}
-                    defaultVolume={0.5}
+                    defaultVolume={0.3}
                     mode='full'
                     theme='auto' />}
         </div>

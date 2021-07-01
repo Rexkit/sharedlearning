@@ -11,6 +11,7 @@ type VPType = {
 }
 
 const VideoPlayer = ({ videoList }: VPType) => {
+    const player = React.useRef<HTMLVmPlayerElement>(null);
     const [currentVideoSrc, setCurrentVideoSrc] = React.useState('');
 
     const changeVideo = (item) => {
@@ -24,30 +25,32 @@ const VideoPlayer = ({ videoList }: VPType) => {
 
     return (
         <>
-            <div className='container mx-auto max-w-screen-lg'>
-                <header className="flex items-center justify-center">
-                        <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Video Content</h2>
-                </header>
-                <div className="z-0 pt-4">
-                    <Player>
-                        <Video crossOrigin="">
-                            <source
-                                data-src={currentVideoSrc}
-                                type="video/mp4"
-                            />
-                        </Video>
+            {videoList.length > 0 && 
+                <div className='container mx-auto max-w-screen-lg'>
+                    <header className="flex items-center justify-center">
+                            <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Video Content</h2>
+                    </header>
+                    <div className="z-0 pt-4">
+                        <Player ref={player}>
+                            <Video crossOrigin="">
+                                <source
+                                    data-src={currentVideoSrc}
+                                    type="video/mp4"
+                                />
+                            </Video>
 
-                        <DefaultUi noSettings >
-                        </DefaultUi>
-                    </Player>
-                </div>
-                <div className="py-4 flex items-center z-10">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Videos available: </h3>
-                    <div className="px-4">
-                        <SelectBox items={videoList} cb={changeVideo} />
+                            <DefaultUi >
+                            </DefaultUi>
+                        </Player>
+                    </div>
+                    <div className="py-4 flex items-center z-10">
+                        <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Videos available: </h3>
+                        <div className="px-4">
+                            <SelectBox items={videoList} cb={changeVideo} />
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </>
     )
 }

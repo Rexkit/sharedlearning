@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { USER_FILES_QUERY } from "../../utils/queries";
 import { userFilesQuery } from "../../utils/types/userFilesQuery";
+import TextEditor from '../../components/TextEditor';
 import VideoPlayer from "../../components/VideoPlayer";
 import dynamic from 'next/dynamic';
 
@@ -47,8 +48,6 @@ const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
                     musicSrc: `${baseStorageURL}/audio/${file.page_id}/${file.filename}`,
                 });
         });
-        console.log(videoList);
-        console.log(audioList);
     }
 
     return (
@@ -62,8 +61,9 @@ const SinglePagePreview = ({ authState, togglePreviewMode }: SPPType) => {
                         </a>
                     </header>
                 </>: null}
+            <TextEditor previewMode={true} page_id={page_id} />
             <VideoPlayer videoList={videoList} />
-            {/* <PlayerWithNoSSR audioList={audioList} /> */}
+            <PlayerWithNoSSR audioList={audioList} />
         </section>
     )
 }

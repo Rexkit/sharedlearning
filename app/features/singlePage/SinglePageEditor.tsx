@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import FileList from './FileList';
 import Uploader from '../../components/Uploader';
-import MarkdownEditor from "../../components/MarkdownEditor";
+import TextEditor from '../../components/TextEditor';
 import { useAuth } from "../../utils/hooks/useAuth";
 
 import { USER_FILES_QUERY } from "../../utils/queries";
@@ -51,7 +51,7 @@ const SinglePageEditor = ({ togglePreviewMode }: SPType) => {
                 </a>
             </header>
 
-            <MarkdownEditor />
+            <TextEditor page_id={page_id} />
 
             {audioList.length > 0 ?
                 <FileList files={audioList} type='Audio' page_id={page_id} refetch={() => refetch()} />
