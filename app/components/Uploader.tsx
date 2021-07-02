@@ -1,15 +1,18 @@
 import * as React from "react";
 import Dropzone from 'react-dropzone-uploader-with-credentials';
+import { useAuth } from "../utils/hooks/useAuth";
+import configData from "../config.json";
 
 type UploaderProps = {
-    user_id: string,
     page_id: string | string[],
     refetch: () => void
 }
 
-const Uploader = ({ user_id, page_id, refetch }: UploaderProps) => {
+const Uploader = ({ page_id, refetch }: UploaderProps) => {
+    const { user } = useAuth();
+    
     // specify upload params and url for your files
-    const getUploadParams = ({ meta }) => { return { url: `http://localhost:3001/${user_id}/${page_id}`, headers: {withCredentials: true}} };
+    const getUploadParams = ({ meta }) => { return { url: `${configData.U_SERVER_URL}/${user.me.id}/${page_id}`, headers: {withCredentials: true}} };
 
     // called every time a file's `status` changes
     const handleChangeStatus = ({ meta, file }, status) => { 

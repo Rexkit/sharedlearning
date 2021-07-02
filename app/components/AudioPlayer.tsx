@@ -13,6 +13,7 @@ const AudioPlayer = ({ audioList }: APtype) => {
     const [MPLists, setMPLists] = React.useState(audioList);
 
     React.useEffect(() => {
+        console.log(audioList);
         setMPLists(audioList);
     }, [ audioList ]);
 

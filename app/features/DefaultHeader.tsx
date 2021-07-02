@@ -5,7 +5,11 @@ import { AcademicCapIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
 import { ThemeChanger } from "../components/ThemeChanger";
 import { useAuth } from "../utils/hooks/useAuth";
 
-export default function DefaultHeader() {
+type HeaderProps = {
+    sharedMode?: boolean
+}
+
+export default function DefaultHeader({ sharedMode = false }: HeaderProps) {
     const { user, logout } = useAuth();
 
     return (
@@ -29,22 +33,23 @@ export default function DefaultHeader() {
                                 <MenuIcon className="h-6 w-6" aria-hidden="true" />
                             </Popover.Button>
                         </div>
-                        <nav className="hidden md:flex space-x-10">
-                            <Link href="/pages">
+                        {!sharedMode && 
+                            <nav className="hidden md:flex space-x-10">
+                                <Link href="/pages">
+                                    <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
+                                        Pages
+                                    </a>
+                                </Link>
                                 <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
-                                    Pages
+                                    About
                                 </a>
-                            </Link>
-                            <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
-                                About
-                            </a>
-                        </nav>
+                            </nav>}
 
                         <div className="flex items-center justify-end md:flex-1 lg:w-0">
                             <div className="md:mr-8">
                                 <ThemeChanger />
                             </div>
-                            {user.me ? 
+                            {!sharedMode && user.me ? 
                                 <div className="hidden md:flex items-center">
                                     <Link href="/login">
                                         <a onClick={() => logout()} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">

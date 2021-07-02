@@ -2,13 +2,17 @@ import React from 'react';
 import { DefaultLayout } from "../../layouts/Default";
 import DefaultHeader from  "../../features/DefaultHeader";
 import DefaultFooter from "../../features/DefaultFooter";
-import SinglePagePreview from '../../features/singlePage/SinglePagePreview';
-import SinglePageEditor from '../../features/singlePage/SinglePageEditor';
+import SinglePage from '../../features/singlePage/SinglePage';
 import { useAuth } from "../../utils/hooks/useAuth";
 
-const singlePage = () => {
+type props = {
+    page_id: string
+}
+
+const singlePage = ({ page_id }: props) => {
     const { user } = useAuth();
-    const [previewMode, setPreviewMode] = React.useState(user.me? false : true);
+    const [sharedMode, setSharedMode] = React.useState(user.me? false : true);
+    const [previewMode, setPreviewMode] = React.useState(false);
 
     const togglePreviewMode = () => {
         setPreviewMode(!previewMode);
@@ -16,13 +20,19 @@ const singlePage = () => {
 
     return (
         <DefaultLayout
-            header={<DefaultHeader />}
-            content={previewMode ?
-                <SinglePagePreview authState={user.me? true : false} togglePreviewMode={togglePreviewMode} />:
-                <SinglePageEditor togglePreviewMode={togglePreviewMode} />}
+            header={<DefaultHeader sharedMode={sharedMode} />}
+            content={<SinglePage sharedMode={sharedMode} previewMode={previewMode} page_id={page_id} togglePreviewMode={togglePreviewMode} />}
             footer={<DefaultFooter />}
         />
     )
+}
+
+export const getServerSideProps = ({ params }) => {
+    return {
+        props: {
+            page_id: params.id
+        }
+    }
 }
 
 export default singlePage;

@@ -1,6 +1,7 @@
 import * as React from "react";
 import FileItem from './FileItem';
 import axios from 'axios';
+import configData from "../../config.json";
 
 type listProps = {
     files: Array<{
@@ -19,7 +20,7 @@ const FileList = ({ files, type, refetch, page_id }: listProps) => {
 
     const deleteItem = async (id: string) => {
         try {
-            const response = await axios.delete(`http://localhost:3001/${page_id}/${id}`, {withCredentials: true});
+            const response = await axios.delete(`${configData.U_SERVER_URL}/${page_id}/${id}`, {withCredentials: true});
             refetch();
             console.log(response);
         } catch (error) {
