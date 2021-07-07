@@ -36,7 +36,8 @@ const typeDefs = gql `
         signin(email: String!, password: String!): User,
         logout: Boolean,
         createPage(name: String!, description: String!): Boolean,
-        setPageTextContent(page_id: String!, content: JSON!): Boolean
+        setPageTextContent(page_id: String!, content: JSON!): Boolean,
+        deletePage(page_id: String!): Boolean
     }
 
     type User {
@@ -170,6 +171,16 @@ const resolvers = {
             if (context.user?.id) {
                 const user_id = context.user.id;
                 await db('pages').insert({ name, description, user_id})
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        async deletePage(_parent, { page_id }, context) {
+            if (context.user?.id) {
+                const user_id = context.user.id;
+                await db('pages').where({ id: page_id, user_id: user_id }).del();
                 return true;
             } else {
                 return false;

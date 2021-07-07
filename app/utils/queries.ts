@@ -74,3 +74,9 @@ export const CREATE_PAGE_QUERY: DocumentNode = gql`
         createPage(name: $name, description: $description)
     }
 `;
+
+export const DELETE_PAGE_QUERY: DocumentNode = gql`
+    mutation deletePage($page_id: String!) {
+        deletePage(page_id: $page_id)
+    }
+`;

@@ -1,6 +1,6 @@
 exports.up = function(knex) {
     return knex.schema.alterTable('media', function(table) {
-        table.uuid("page_id").references('id').inTable('pages');
+        table.uuid("page_id").references('id').inTable('pages').onUpdate('CASCADE').onDelete('CASCADE');
     })
 }
 
