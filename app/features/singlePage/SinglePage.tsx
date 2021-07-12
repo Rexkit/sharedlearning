@@ -6,8 +6,19 @@ import TextEditor from '../../components/TextEditor';
 import VideoPlayer from "../../components/VideoPlayer";
 import dynamic from 'next/dynamic';
 import configData from "../../config.json";
-import { USER_FILES_QUERY } from "../../utils/queries";
+import { USER_FILES_QUERY, PAGE_QUERY } from "../../utils/queries";
 import { userFilesQuery } from "../../utils/types/userFilesQuery";
+import { pageQuery } from "../../utils/types/pageQuery";
+import {
+    FacebookShareButton,
+    FacebookIcon,
+    TelegramShareButton,
+    TelegramIcon,
+    VKShareButton,
+    VKIcon,
+    WhatsappIcon,
+    WhatsappShareButton
+  } from "react-share";
 
 const PlayerWithNoSSR = dynamic(() => import('../../components/AudioPlayer'), {
     ssr: false,
@@ -25,7 +36,14 @@ const SinglePage = ({ sharedMode, previewMode, page_id, togglePreviewMode }: SPP
         variables: { pageid: page_id }
     });
 
+    const { loading: loadingPage, data: dataPage, refetch: refetchPage } = useQuery<pageQuery>(PAGE_QUERY, {
+        variables: { pageid: page_id }
+    });
+
+    const shareURL = `http://validurl.com/pages/${page_id}`;
     const baseStorageURL = configData.U_SERVER_URL;
+
+    const [pageTitle, setPageTitle] = React.useState('');
     const [mediaState, setMediaState] = React.useState({
         audioList: [],
         videoList: [],
@@ -67,6 +85,12 @@ const SinglePage = ({ sharedMode, previewMode, page_id, togglePreviewMode }: SPP
             mode
         }
     }
+    
+    React.useEffect(() => {
+        if (!loadingPage && dataPage) {
+            setPageTitle(dataPage.page.name)
+        }
+    }, [loadingPage, dataPage]);
 
     React.useEffect(() => {
         if (!loading && data) {
@@ -77,10 +101,14 @@ const SinglePage = ({ sharedMode, previewMode, page_id, togglePreviewMode }: SPP
     return (
         <section className="container px-5 py-6 mx-auto space-y-4">
             {!sharedMode && <header className="flex items-center justify-center">
-                <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">{previewMode ? 'Page' : 'Add content to the page'}</h2>
+                <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">{previewMode ? pageTitle : 'Add content to the page'}</h2>
                 <a onClick={togglePreviewMode} className="cursor-pointer ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-                    {previewMode ? 'Preview' : 'Edit'}
+                    {previewMode ? 'Edit' : 'Preview'}
                 </a>
+            </header>}
+
+            {sharedMode && <header className="flex items-center justify-center">
+                <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">{pageTitle}</h2>
             </header>}
 
             <TextEditor previewMode={sharedMode || previewMode} page_id={page_id} />
@@ -104,6 +132,40 @@ const SinglePage = ({ sharedMode, previewMode, page_id, togglePreviewMode }: SPP
                     <VideoPlayer videoList={mediaState.videoList} />
                     <PlayerWithNoSSR audioList={mediaState.audioList} />
                 </>}
+            
+
+            <header className="flex items-center justify-between">
+                <h2 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-200">Share the page</h2>
+            </header>
+            <div className='flex space-x-2'>
+                <FacebookShareButton
+                    url={shareURL}
+                    quote={`SharedLearning - ${pageTitle}`}
+                >
+                    <FacebookIcon size={32} round />
+                </FacebookShareButton>
+
+                <WhatsappShareButton
+                    url={shareURL}
+                    title={`SharedLearning - ${pageTitle}`}
+                    separator=":: "
+                >
+                    <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+
+                <VKShareButton
+                    url={shareURL}
+                >
+                    <VKIcon size={32} round />
+                </VKShareButton>
+
+                <TelegramShareButton
+                    url={shareURL}
+                    title={`SharedLearning - ${pageTitle}`}
+                >
+                    <TelegramIcon size={32} round />
+                </TelegramShareButton>
+            </div>
         </section>
     )
 }

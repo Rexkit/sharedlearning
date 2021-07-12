@@ -37,6 +37,7 @@
         "react-dropzone": "^11.3.2",
         "react-dropzone-uploader-with-credentials": "^1.0.0",
         "react-jinke-music-player": "^4.24.1",
+        "react-share": "^4.4.0",
         "uuid": "^8.3.2"
     },
     "devDependencies": {

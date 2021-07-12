@@ -27,29 +27,29 @@ export default function DefaultHeader({ sharedMode = false }: HeaderProps) {
                                 />
                             </a>
                         </div>
-                        <div className="md:hidden order-last">
-                            <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                                <span className="sr-only">Open menu</span>
-                                <MenuIcon className="h-6 w-6" aria-hidden="true" />
-                            </Popover.Button>
-                        </div>
+
                         {!sharedMode && 
+                            <div className="md:hidden order-last">
+                                <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                    <span className="sr-only">Open menu</span>
+                                    <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                                </Popover.Button>
+                            </div>}
+
+                        {!sharedMode && user.me ? 
                             <nav className="hidden md:flex space-x-10">
                                 <Link href="/pages">
                                     <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
                                         Pages
                                     </a>
                                 </Link>
-                                <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
-                                    About
-                                </a>
-                            </nav>}
+                            </nav>: null}
 
                         <div className="flex items-center justify-end md:flex-1 lg:w-0">
                             <div className="md:mr-8">
                                 <ThemeChanger />
                             </div>
-                            {!sharedMode && user.me ? 
+                            {!sharedMode ? user.me ? 
                                 <div className="hidden md:flex items-center">
                                     <Link href="/login">
                                         <a onClick={() => logout()} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white">
@@ -70,7 +70,7 @@ export default function DefaultHeader({ sharedMode = false }: HeaderProps) {
                                         </a>
                                     </Link>
                                 </div>
-                            }
+                            : null}
                         </div>
                     </div>
                 </div>
@@ -107,10 +107,6 @@ export default function DefaultHeader({ sharedMode = false }: HeaderProps) {
                             <div className="grid grid-cols-2 gap-y-4 gap-x-8">
                                 <a href="#" className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-200 dark:hover:text-gray-100">
                                     Pages
-                                </a>
-
-                                <a href="#" className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-200 dark:hover:text-gray-100">
-                                    About
                                 </a>
                             </div>
                             <div>

@@ -27,6 +27,7 @@ const typeDefs = gql `
     type Query {
         me: User,
         pages: [Page],
+        page(page_id: String!): Page,
         files(page_id: String!): [File],
         pageTextContent(page_id: String!): [TextContent]
     }
@@ -84,6 +85,10 @@ const resolvers = {
             } else {
                 return null;
             }
+        },
+        async page(_parent, { page_id }, context) {
+            const [page] = await db('pages').where('id', page_id);
+            return page;
         },
         async files(_parent, { page_id }, context) {
             const files = await db('media').where({

@@ -21,6 +21,16 @@ export const USER_PAGES_QUERY: DocumentNode = gql`
     }
 `;
 
+export const PAGE_QUERY: DocumentNode = gql`
+    query pageQuery($pageid: String!) {
+        page(page_id: $pageid) {
+            id,
+            name,
+            description
+        }
+    }
+`;
+
 export const USER_FILES_QUERY: DocumentNode = gql`
     query userFilesQuery($pageid: String!) {
         files(page_id: $pageid) {

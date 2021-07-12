@@ -33,22 +33,20 @@ export const Notification = ({ heading, text, state, duration = 4000, callback }
             leaveTo="opacity-0"
             afterEnter={setTimer}
         >
-            <div>
-                <div className="absolute z-100 bottom-8 right-8">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg border-gray-200 dark:border-gray-800 border p-3 shadow-lg">
-                    <div className="flex flex-row">
-                        <div className="px-2">
-                            {state ? 
-                                <CheckCircleIcon className="h-5 w-5 text-green-500" aria-hidden="true" />:
-                                <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
-                            }
-                        </div>
-                        <div className="ml-2 mr-6">
-                        <span className="font-semibold">{heading}</span>
-                        <span className="block text-gray-500 dark:text-gray-400">{text}</span>
-                        </div>
+            <div className="fixed z-100 bottom-8 right-8">
+                <div className="bg-white dark:bg-gray-800 rounded-lg border-gray-200 dark:border-gray-800 border p-3 shadow-lg">
+                <div className="flex flex-row">
+                    <div className="px-2">
+                        {state ? 
+                            <CheckCircleIcon className="h-5 w-5 text-green-500" aria-hidden="true" />:
+                            <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+                        }
                     </div>
+                    <div className="ml-2 mr-6">
+                    <span className="font-semibold">{heading}</span>
+                    <span className="block text-gray-500 dark:text-gray-400">{text}</span>
                     </div>
+                </div>
                 </div>
             </div>
         </Transition>

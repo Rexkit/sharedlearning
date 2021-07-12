@@ -30,10 +30,14 @@ const AudioPlayer = ({ audioList }: APtype) => {
                     showLyric={false}
                     showDestroy={false}
                     remove={false}
-                    toggleMode={false}
+                    responsive={false}
                     autoPlay={false}
+                    defaultPosition={{
+                        right: 50,
+                        bottom: 50,
+                    }}
                     defaultVolume={0.3}
-                    mode='full'
+                    mode='mini'
                     theme='auto' />}
         </div>
     )
