@@ -40,14 +40,14 @@ const TextEditor = ({ previewMode = false, page_id }: editorProps) => {
         if(loading === false && data){
             if (data.pageTextContent.length === 0) {
                 if (!previewMode) {
-                    setEditorState(theme === 'dark' ? initialContent.dark : initialContent.light);
+                    setEditorState(initialContent.default);
                 }
             } else {
                 const textData = data.pageTextContent[0].data;
                 setEditorState(textData);
             }
         }
-    }, [ loading, data ])
+    }, [ loading, data ]);
 
     React.useEffect(() => {
         setreadOnly(previewMode);
@@ -55,7 +55,7 @@ const TextEditor = ({ previewMode = false, page_id }: editorProps) => {
             if (previewMode) {
                 setEditorState(null);
             } else {
-                setEditorState(theme === 'dark' ? initialContent.dark : initialContent.light);
+                setEditorState(initialContent.default);
             }
         }
     }, [previewMode])
@@ -75,8 +75,8 @@ const TextEditor = ({ previewMode = false, page_id }: editorProps) => {
         <>
             {textUpdated ? <Notification heading='Notification' text="Text updated!" state={true} callback={() => setTextUpdated(false)} /> : null}
             <div className="container px-5 mx-auto pb-5">
-                {editorState && readOnly && <DanteEditor widgets={[]} readOnly={true} content={editorState} onUpdate={onContentChange} />}
-                {editorState && !readOnly && <DanteEditor widgets={[]} readOnly={false} content={editorState} onUpdate={onContentChange} />}
+                {editorState && readOnly && <DanteEditor widgets={[]} theme={theme === 'dark' ? darkTheme : defaultTheme} readOnly={true} content={editorState} onUpdate={onContentChange} />}
+                {editorState && !readOnly && <DanteEditor widgets={[]} theme={theme === 'dark' ? darkTheme : defaultTheme} readOnly={false} content={editorState} onUpdate={onContentChange} />}
                 {!previewMode &&
                     <a onClick={onSave} className="cursor-pointer whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                         Save Changes

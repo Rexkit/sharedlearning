@@ -3,6 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.css-1ozaqey {
+    background-color: transparent !important;
+}
+
+.dante-menu-buttons .dante-menu-button:nth-child(3) {
+    display: none;
+}
+
 html.light .react-jinke-music-player-main .music-player-panel, html.light .audio-lists-panel {
     --tw-bg-opacity: 1;
     background-color: rgba(79, 70, 229, var(--tw-bg-opacity));

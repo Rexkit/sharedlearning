@@ -40,7 +40,7 @@ const SinglePage = ({ sharedMode, previewMode, page_id, togglePreviewMode }: SPP
         variables: { pageid: page_id }
     });
 
-    const shareURL = `http://validurl.com/pages/${page_id}`;
+    const shareURL = `${configData.APP_URL}/pages/${page_id}`;
     const baseStorageURL = configData.U_SERVER_URL;
 
     const [pageTitle, setPageTitle] = React.useState('');
@@ -155,6 +155,7 @@ const SinglePage = ({ sharedMode, previewMode, page_id, togglePreviewMode }: SPP
 
                 <VKShareButton
                     url={shareURL}
+                    title={`SharedLearning - ${pageTitle}`}
                 >
                     <VKIcon size={32} round />
                 </VKShareButton>
