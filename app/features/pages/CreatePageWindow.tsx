@@ -107,6 +107,7 @@ const CreatePageWindow = ({ isOpenProp, closeModalProp }) => {
                                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-200 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                 placeholder="Title"
                                                 value={name}
+                                                maxLength={40}
                                                 onChange={({ target }) => setName(target.value)}
                                             />
                                         </div>
@@ -122,6 +123,7 @@ const CreatePageWindow = ({ isOpenProp, closeModalProp }) => {
                                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:bg-gray-900 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-200 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                 placeholder="Description"
                                                 value={description}
+                                                maxLength={200}
                                                 onChange={({ target }) => setDescription(target.value)}
                                             />
                                         </div>

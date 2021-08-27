@@ -1,7 +1,9 @@
+import configData from "./config.json";
+
 module.exports = {
     client: {
         service: {
-            url: 'http://localhost:3000/api/graphql',
+            url: `${configData.APP_URL}/api/graphql`,
         },
         includes: ['./utils/**/*.{ts,tsx,js,jsx,graphql}'],
     },
