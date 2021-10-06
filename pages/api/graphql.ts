@@ -201,7 +201,7 @@ const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req, res }) => {
-        const cookies = new Cookies(req, res);
+        const cookies = new Cookies(req, res, { secure: false });
         const token = cookies.get("auth-token");
         const user = verifyToken(token);
         return {
