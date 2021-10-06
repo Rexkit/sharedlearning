@@ -12,6 +12,7 @@ const Uploader = ({ page_id, refetch }: UploaderProps) => {
     const { user } = useAuth();
     
     // specify upload params and url for your files
+    {/*// @ts-ignore */}
     const getUploadParams = ({ meta }) => { return { url: `${configData.U_SERVER_URL}/${user.me.id}/${page_id}`, headers: {withCredentials: true}} };
 
     // called every time a file's `status` changes
@@ -36,6 +37,7 @@ const Uploader = ({ page_id, refetch }: UploaderProps) => {
                     dropzone: "overflow-hidden",
                     preview: "dark:text-gray-200"
                 }}
+                /*// @ts-ignore */
                 getUploadParams={getUploadParams}
                 onChangeStatus={handleChangeStatus}
                 onSubmit={handleSubmit}
