@@ -1,7 +1,7 @@
 import * as React from "react";
 import FileItem from './FileItem';
 import axios from 'axios';
-import configData from "../../config.json";
+import configData from "../../config";
 
 type listProps = {
     files: Array<{

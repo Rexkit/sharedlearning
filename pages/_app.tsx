@@ -6,7 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '../features/auth/AuthProvider';
 import { AppProps } from 'next/app';
 import { ProtectRoute } from '../features/auth/protectRoute';
-import configData from "./config.json";
+import configData from "../config";
 
 const client = new ApolloClient<NormalizedCacheObject>({
     cache: new InMemoryCache(),

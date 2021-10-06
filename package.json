@@ -6,6 +6,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
+        "migrate": "knex migrate:latest",
         "apollo:codegen": "apollo client:codegen --tagName=gql --target=typescript types"
     },
     "dependencies": {

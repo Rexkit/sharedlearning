@@ -5,7 +5,7 @@ import Uploader from '../../components/Uploader';
 import TextEditor from '../../components/TextEditor';
 import VideoPlayer from "../../components/VideoPlayer";
 import dynamic from 'next/dynamic';
-import configData from "../../config.json";
+import configData from "../../config";
 import { USER_FILES_QUERY, PAGE_QUERY } from "../../utils/queries";
 import { userFilesQuery } from "../../utils/types/userFilesQuery";
 import { pageQuery } from "../../utils/types/pageQuery";

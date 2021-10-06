@@ -1,7 +1,7 @@
 import * as React from "react";
 import Dropzone from 'react-dropzone-uploader-with-credentials';
 import { useAuth } from "../utils/hooks/useAuth";
-import configData from "../config.json";
+import configData from "../config";
 
 type UploaderProps = {
     page_id: string | string[],
