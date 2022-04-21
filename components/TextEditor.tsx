@@ -75,10 +75,12 @@ const TextEditor = ({ previewMode = false, page_id }: editorProps) => {
         <>
             {textUpdated ? <Notification heading='Notification' text="Text updated!" state={true} callback={() => setTextUpdated(false)} /> : null}
             <div className="container px-5 mx-auto pb-5">
-                {/*// @ts-ignore */}
-                {editorState && readOnly && <DanteEditor widgets={[]} theme={theme === 'dark' ? darkTheme : defaultTheme} readOnly={true} content={editorState} onUpdate={onContentChange} />} // @ts-ignore 
-                {/*// @ts-ignore */}
-                {editorState && !readOnly && <DanteEditor widgets={[]} theme={theme === 'dark' ? darkTheme : defaultTheme} readOnly={false} content={editorState} onUpdate={onContentChange} />} // @ts-ignore
+                {/*
+                // @ts-ignore */}
+                {editorState && readOnly && <DanteEditor widgets={[]} theme={theme === 'dark' ? darkTheme : defaultTheme} readOnly={true} content={editorState} onUpdate={onContentChange} />}
+                {/*
+                // @ts-ignore */}
+                {editorState && !readOnly && <DanteEditor widgets={[]} theme={theme === 'dark' ? darkTheme : defaultTheme} readOnly={false} content={editorState} onUpdate={onContentChange} />}
                 {!previewMode &&
                     <a onClick={onSave} className="cursor-pointer whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                         Save Changes

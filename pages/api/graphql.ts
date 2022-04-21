@@ -1,17 +1,22 @@
-import { ApolloServer, gql, UserInputError, AuthenticationError } from 'apollo-server-micro';
+import {
+    ApolloServer,
+    gql,
+    UserInputError,
+    AuthenticationError,
+} from "apollo-server-micro";
 import knex from "knex";
 import jwt from "jsonwebtoken";
 import Cookies from "cookies";
 import bcrypt from "bcrypt";
-import GraphQLJSON from 'graphql-type-json';
+import GraphQLJSON from "graphql-type-json";
 
-require('dotenv').config()
+require("dotenv").config();
 
 const db = knex({
     client: "pg",
     connection: {
         connectionString: process.env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false },
+        ssl: false,
     },
 });
 
@@ -24,44 +29,44 @@ const verifyToken = (token) => {
     }
 };
 
-const typeDefs = gql `
+const typeDefs = gql`
     scalar JSON
 
     type Query {
-        me: User,
-        pages: [Page],
-        page(page_id: String!): Page,
-        files(page_id: String!): [File],
+        me: User
+        pages: [Page]
+        page(page_id: String!): Page
+        files(page_id: String!): [File]
         pageTextContent(page_id: String!): [TextContent]
     }
 
     type Mutation {
-        signup(username: String!, email: String!, password: String!): User,
-        signin(email: String!, password: String!): User,
-        logout: Boolean,
-        createPage(name: String!, description: String!): Boolean,
-        setPageTextContent(page_id: String!, content: JSON!): Boolean,
+        signup(username: String!, email: String!, password: String!): User
+        signin(email: String!, password: String!): User
+        logout: Boolean
+        createPage(name: String!, description: String!): Boolean
+        setPageTextContent(page_id: String!, content: JSON!): Boolean
         deletePage(page_id: String!): Boolean
     }
 
     type User {
-        id: ID!,
-        username: String!,
+        id: ID!
+        username: String!
         email: String!
     }
 
     type Page {
-        id: ID!,
-        name: String!,
-        description: String!,
+        id: ID!
+        name: String!
+        description: String!
         user_id: ID!
     }
 
     type File {
-        id: ID!,
-        filename: String!,
-        type: String!,
-        user_id: ID!,
+        id: ID!
+        filename: String!
+        type: String!
+        user_id: ID!
         page_id: ID!
     }
 
@@ -75,7 +80,7 @@ const resolvers = {
     Query: {
         async me(_parent, _args, context) {
             if (context.user?.id) {
-                let [user] = await db('users').where('id', context.user.id);
+                let [user] = await db("users").where("id", context.user.id);
                 return user;
             } else {
                 return null;
@@ -83,42 +88,48 @@ const resolvers = {
         },
         async pages(_parent, _args, context) {
             if (context.user?.id) {
-                const pages = await db('pages').where('user_id', context.user.id);
+                const pages = await db("pages").where(
+                    "user_id",
+                    context.user.id
+                );
                 return pages;
             } else {
                 return null;
             }
         },
         async page(_parent, { page_id }, context) {
-            const [page] = await db('pages').where('id', page_id);
+            const [page] = await db("pages").where("id", page_id);
             return page;
         },
         async files(_parent, { page_id }, context) {
-            const files = await db('media').where({
-                'page_id': page_id
+            const files = await db("media").where({
+                page_id: page_id,
             });
             return files;
         },
         async pageTextContent(_parent, { page_id }, context) {
-            const textContent = await db('textcontent').where({
-                'page_id': page_id
+            const textContent = await db("textcontent").where({
+                page_id: page_id,
             });
             return textContent;
-        }
+        },
     },
 
     Mutation: {
         async setPageTextContent(_parent, { page_id, content }, context) {
             if (context.user?.id) {
                 try {
-                    await db('textcontent').insert({
-                        page_id,
-                        data: JSON.stringify(content)
-                    }).onConflict("page_id").merge();
+                    await db("textcontent")
+                        .insert({
+                            page_id,
+                            data: JSON.stringify(content),
+                        })
+                        .onConflict("page_id")
+                        .merge();
                 } catch (error) {
                     console.log(error.message);
                 }
-                
+
                 return true;
             } else {
                 return false;
@@ -128,8 +139,10 @@ const resolvers = {
             let hash = await bcrypt.hash(password, 10);
 
             try {
-                await db('users').insert({ username, email, password: hash });
-                let [user] = await db('users').where('email', email);
+                await db("users").insert({ username, email, password: hash });
+                let [user] = await db("users").where("email", email);
+
+                console.log(user);
 
                 let token = jwt.sign({ id: user.id }, process.env.SECRET!);
                 context.cookies.set("auth-token", token, {
@@ -140,17 +153,21 @@ const resolvers = {
                 });
                 return user;
             } catch (err) {
-                if (err.code === '23505') {
+                console.log(err);
+                if (err.code === "23505") {
                     throw new UserInputError(err.detail);
                 }
             }
         },
 
         async signin(_parent, { email, password }, context) {
-            let [user] = await db('users').where('email', email);
+            let [user] = await db("users").where("email", email);
 
             if (user) {
-                const validPassword = await bcrypt.compare(password, user.password);
+                const validPassword = await bcrypt.compare(
+                    password,
+                    user.password
+                );
 
                 if (validPassword) {
                     let token = jwt.sign({ id: user.id }, process.env.SECRET!);
@@ -178,7 +195,7 @@ const resolvers = {
         async createPage(_parent, { name, description }, context) {
             if (context.user?.id) {
                 const user_id = context.user.id;
-                await db('pages').insert({ name, description, user_id})
+                await db("pages").insert({ name, description, user_id });
                 return true;
             } else {
                 return false;
@@ -188,13 +205,15 @@ const resolvers = {
         async deletePage(_parent, { page_id }, context) {
             if (context.user?.id) {
                 const user_id = context.user.id;
-                await db('pages').where({ id: page_id, user_id: user_id }).del();
+                await db("pages")
+                    .where({ id: page_id, user_id: user_id })
+                    .del();
                 return true;
             } else {
                 return false;
             }
-        }
-    }
+        },
+    },
 };
 
 const apolloServer = new ApolloServer({
@@ -209,12 +228,12 @@ const apolloServer = new ApolloServer({
             user,
         };
     },
-})
+});
 
 export const config = {
     api: {
         bodyParser: false,
     },
-}
+};
 
-export default apolloServer.createHandler({ path: '/api/graphql' });
+export default apolloServer.createHandler({ path: "/api/graphql" });

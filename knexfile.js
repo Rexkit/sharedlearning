@@ -1,12 +1,15 @@
-require('dotenv').config()
+require("dotenv").config();
 
 module.exports = {
     development: {
         client: "postgresql",
-        connection: process.env.DATABASE_URL,
+        connection: {
+            connectionString: process.env.DATABASE_URL,
+            ssl: false,
+        },
         migrations: {
-            tableName: "knex_migrations"
-        }
+            tableName: "knex_migrations",
+        },
     },
 
     production: {
@@ -17,7 +20,7 @@ module.exports = {
         },
         migrations: {
             tableName: "knex_migrations",
-            directory: __dirname + '/migrations'
-        }
-    }
+            directory: __dirname + "/migrations",
+        },
+    },
 };
